@@ -3,7 +3,7 @@ const moongose = require('mongoose');
 const dbConnetion = async() => {
 
     try{
-        moongose.connect(process.env.MONGOBD_CNN);
+        moongose.connect(process.env.MONGODB_CNN);
         console.log('Conectado a la base de datos')
     }catch(error){
         console.log(error)
