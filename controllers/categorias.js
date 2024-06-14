@@ -64,20 +64,24 @@ const crearCategoria = async (req, res = response) => {
 //Actualizar categoria
 const actualizarCategorias = async(req, res = response) => {
 
-    const { id } = req.params;
-    const nombre = req.body.nombre.toUpperCase();
 
-    const categoria = await Categoria.findByIdAndUpdate( id, {nombre} );
+    const { id } = req.params;
+    const { estado, usuario, ...data} = req.body;
+
+    data.nombre = data.nombre.toUpperCase();    
+    data.usuario = req.usuario._id
+
+    const categoria = await Categoria.findByIdAndUpdate( id, data, {new: true});
 
     res.json(categoria);
 }
 
 //borrar categorias
-
 const borrarCategoria = async(req, res = response) => {
 
     const { id } = req.params;
-    const categoria = await Categoria.findByIdAndUpdate( id, { estado: false } );
+    
+    const categoria = await Categoria.findByIdAndUpdate( id, { estado: false }, {new:true} );
 
     res.json(categoria);
 }

@@ -1,7 +1,7 @@
 const { Router } = require('express');
 const { check } = require('express-validator');
 
-const { validarJWT, validarCampos } = require('../middlewares');
+const { validarJWT, validarCampos, esAdminRole } = require('../middlewares');
 
 const { 
     crearCategoria, 
@@ -26,7 +26,7 @@ router.get('/', obtenerCategorias)
 router.get('/:id', [
     //Crear validacion
     check('id', 'No es un id valido de mongo').isMongoId(),
-    check('id').custom(existeCategoria),
+    check('id').custom(),
     validarCampos
 ],obtenerCategoriaById)
 
@@ -40,6 +40,7 @@ router.post('/', [
 //Actualizar - privado - cualquier persona con un token valido
 router.put('/:id', [
     validarJWT,
+    check('nombre', 'El nombre es obligatorio').not().isEmpty(),
     check('id', 'No es un id valido de mongo').isMongoId(),
     check('id').custom(existeCategoria),
     validarCampos
@@ -47,7 +48,11 @@ router.put('/:id', [
 
 //Borrar una categoria - Admin
 router.delete('/:id', [
-    
+    validarJWT,
+    esAdminRole,
+    check('id', 'Mongo id invalido').isMongoId(),
+    check('id').custom(existeCategoria),
+    validarCampos
 ], borrarCategoria)
 
 module.exports = router;
