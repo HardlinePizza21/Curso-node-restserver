@@ -1,21 +1,18 @@
-const { response } = require('express')
+const { response } = require('express');
+const { Usuario } = require('../models');
+const jwt = require('jsonwebtoken');
 
 
-const esAdminRole = ( req, res = response, next ) => {
 
-    if ( !req.usuario ) {
-        return res.status(500).json({
-            msg: 'Se quiere verificar el role sin validar el token primero'
-        });
-    }
+const esAdminRole = async( req, res = response, next ) => {
 
-    const { rol, nombre } = req.usuario;
-    
-    if ( rol !== 'ADMIN_ROLE' ) {
-        return res.status(401).json({
-            msg: `${ nombre } no es administrador - No puede hacer esto`
-        });
-    }
+    const rol = req.usuario.rol
+
+    if(rol != 'ADMIN_ROLE'){
+        res.status(401).json({
+            msg: 'El usuario no es administrador'
+        })
+    }   
 
     next();
 }
