@@ -10,6 +10,7 @@ const {
     actualizarCategorias,
     borrarCategoria
 } = require('../controllers/categorias');
+
 const { existeCategoria } = require('../helpers/db-validators')
 
 const router = Router();
@@ -26,7 +27,7 @@ router.get('/', obtenerCategorias)
 router.get('/:id', [
     //Crear validacion
     check('id', 'No es un id valido de mongo').isMongoId(),
-    check('id').custom(),
+    check('id').custom(existeCategoria),
     validarCampos
 ],obtenerCategoriaById)
 
