@@ -8,11 +8,11 @@ const {
     obtenerProductos,
     obtenerProductoPorId,
     actualizarProducto,
-    // borrarProducto,
+    borrarProducto,
     crearProducto
 } = require('../controllers/productos')
 
-const { existeProducto } = require('../helpers/db-validators')
+const { existeProducto, existeCategoria } = require('../helpers/db-validators')
 
 const router = Router();
 
@@ -29,6 +29,7 @@ router.post('/', [
     validarJWT,
     check('nombre', 'El nombre es obligatorio').not().isEmpty(),
     check('categoria', 'No es un ID de mongo valido').isMongoId(),
+    check('categoria').custom(existeCategoria),
     validarCampos
 ],crearProducto)
 
@@ -49,12 +50,12 @@ router.put('/:id', [
 ],actualizarProducto)
 
 //Borrar un producto - Admin
-// router.delete('/:id', [
-//     // validarJWT,
-//     // esAdminRole,
-//     // check('id', 'Mongo id invalido').isMongoId(),
-//     // check('id').custom(existeCategoria),
-//     // validarCampos
-// ], borrarProducto)
+router.delete('/:id', [
+    validarJWT,
+    esAdminRole,
+    check('id', 'Mongo id invalido').isMongoId(),
+    check('id').custom(existeProducto),
+    validarCampos
+], borrarProducto)
 
 module.exports = router;
