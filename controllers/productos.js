@@ -70,7 +70,7 @@ const actualizarProducto = async(req, res) => {
     
     const { id } = req.params 
 
-    const { estado, usuario, categoria, ...data } = req.body 
+    const { estado, usuario, ...data } = req.body 
 
     if(data.nombre){
         data.nombre = data.nombre.toUpperCase()
@@ -86,15 +86,19 @@ const actualizarProducto = async(req, res) => {
 
 }
 
-// const borrarProducto = (req, res) => {
+const borrarProducto = async(req, res = response) => {
 
-// }
+    const { id } = req.params;
+    
+    const producto = await Producto.findByIdAndUpdate( id, { estado: false }, {new:true});
+
+    res.json(producto);
+}
 
 module.exports = {
     obtenerProductos,
     obtenerProductoPorId,
     actualizarProducto,
-    // borrarProducto,
-    // actualizarProducto,
+    borrarProducto,
     crearProducto
 }

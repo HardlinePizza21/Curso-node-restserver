@@ -1,7 +1,4 @@
 const { response } = require('express');
-const { Usuario } = require('../models');
-const jwt = require('jsonwebtoken');
-
 
 
 const esAdminRole = async( req, res = response, next ) => {
